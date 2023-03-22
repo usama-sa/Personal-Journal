@@ -16,7 +16,7 @@ import { ActiveJournal, AddFavourites, AddJournalEntry, AddJournalEntryDraft, Ad
 import { Badge } from 'react-bootstrap';
 import axios from 'axios';
 import { btnhold } from './../styles/JournalEntry';
- const modules = {
+const modules = {
     toolbar: [
         [{ font: [] }],
         [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -32,14 +32,9 @@ import { btnhold } from './../styles/JournalEntry';
 }
 const JournalEntrySub = () => {
     const navigate = useNavigate()
-    function Tec() {
-
-    }
-
-
     const [starState, setstarState] = useState()
     const [title, setTitle] = useState("")
-    const [timeout, settimeout] = useState(false)
+    const [edit, seteditable] = useState(false)
     const detail = "qqqqqqqqqq"
     function handleClick() {
         AddFavourites(parseInt(row.split("=")[1])).then(e => {
@@ -60,12 +55,12 @@ const JournalEntrySub = () => {
     function handleTitle(text) {
         console.log(text, "check it out")
         setTitle(text)
-        AddDrafts()
+        AddDrafts(value,text)
 
 
     }
-    function AddDrafts() {
-        AddJournalEntryDraft(parseInt(row.split("=")[1]), title, value).then(e => {
+    function AddDrafts(e,f) {
+        AddJournalEntryDraft(parseInt(row.split("=")[1]), f, e).then(e => {
             if (e.success === 0) {
                 navigate("/")
                 localStorage.clear()
@@ -75,7 +70,8 @@ const JournalEntrySub = () => {
         })
     }
     function ActiveDrafts() {
-        AddQuotes(parseInt(row.split("=")[1]), quotation ? quotes[random].text : null).then((f) => {
+        AddQuotes(parseInt(row.split("=")[1]), quotation ? quotes[random].text : getquotes).then((f) => {
+            console.log(f)
             if (f.success === 0) {
                 navigate("/")
                 localStorage.clear()
@@ -117,9 +113,7 @@ const JournalEntrySub = () => {
     const row = split[2]
     const editable = split[3]
     const [random, setrandom] = useState()
-
-    const notify = () => toast("Journal Entry has been added to favourites");
-    const Denotify = () => toast("Journal Entry has been removed from favourites");
+    const [timer, setTimer] = useState(false)
     function handleSafe(a) {
         setLoad(true)
         if (path && type && row && editable) {
@@ -172,8 +166,9 @@ const JournalEntrySub = () => {
     const [quotation, setquotation] = useState(false)
 
     const [value, setValue] = useState('');
-    const [getquotes, setGetQuotes] = useState();
+    const [getquotes, setGetQuotes] = useState(null);
     const [load, setLoad] = useState(false)
+    const [pageload, setpageLoad] = useState(false)
     // localStorage.setItem(title,value)
     var drafteditems = [];
     const [quotes, setquotes] = useState([])
@@ -198,7 +193,7 @@ const JournalEntrySub = () => {
     useEffect(() => {
         // setisloading(true)
 
-
+        setpageLoad(true)
 
 
         if (type && row && editable) {
@@ -217,6 +212,7 @@ const JournalEntrySub = () => {
                     setstarState(e.Journals.filter(f => f.id === parseInt(path))[0].entrieslist.filter(f => f.id === parseInt(row.split("=")[1]))[0].isFavourite)
                     setGetQuotes(e.Journals.filter(f => f.id === parseInt(path))[0].entrieslist.filter(f => f.id === parseInt(row.split("=")[1]))[0].quote)
                     console.log(e.Journals.filter(f => f.id === parseInt(path))[0].entrieslist.filter(f => f.id === parseInt(row.split("=")[1]))[0].quote, "quotess")
+                    setpageLoad(false)
 
                 }
             })
@@ -232,6 +228,7 @@ const JournalEntrySub = () => {
                     window.location.reload()
                 } else {
                     setjitems(data.message)
+                    setpageLoad(false)
                 }
             })
 
@@ -257,18 +254,19 @@ const JournalEntrySub = () => {
 
     var bgcolors = localStorage.getItem("bgcolor")
 
-    return (    
-        <div style={{ pointerEvents: load ? "none" : "" }}>
-            {load && <div class="text-center">
+    return (
+        <div style={{ pointerEvents: load || pageload ? "none" : "" }}>
+            {load || pageload && <div class="text-center">
                 <div class="spinner-border" role="status">
                 </div>
             </div>
             }
             {draft === undefined ? null : <EntryMain>
-                <div style={{ cursor: 'pointer' }} onClick={() => navigate('/Journalcover')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                <div  >
+                    <svg style={{ cursor: 'pointer' }} onClick={() => navigate('/Journalcover')} xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z" />
                     </svg>
+                    <p>{timer && <p style={{ fontSize: "8px", fontStyle: "italic" }}>Changes auto-saved as draft moment ago at ({new Date().toLocaleTimeString()})</p>}</p>
                 </div>
                 <TitleRow>
                     {
@@ -283,9 +281,8 @@ const JournalEntrySub = () => {
                     <TitleInput type='text' defaultValue=
                         {draft ? title : null} placeholder='Entry Title' onChange={(e) => {
                             handleTitle(e.target.value)
-                            settimeout(true)
-                        }} /> 
-                        <BtnHoldd>
+                        }} />
+                    <BtnHoldd>
                         <SaveButton onClick={() => handleSafe(1)}>
                             <Savetext>
                                 <Badge bg="success">
@@ -302,10 +299,10 @@ const JournalEntrySub = () => {
                                 </Badge>
                             </Savetext>
                         </SaveButton>}
-                        </BtnHoldd>
-                          
-                         
-                 </TitleRow>
+                    </BtnHoldd>
+
+
+                </TitleRow>
                 {/* <ToolBar /> */}
 
                 {(getquotes == undefined || getquotes == null) && <img src={MainImages.lightbulb} style={{ width: 30, height: 30, cursor: "pointer", marginTop: 20, marginBottom: 20 }} onClick={() => {
@@ -328,9 +325,14 @@ const JournalEntrySub = () => {
                     </div>
                 }
 
-                <ReactQuill theme="snow" value={value} onChange={(e) => {
+                <ReactQuill theme="snow" onKeyUp={() => {
+                    const timeoutId = setTimeout(() =>
+                        setTimer(true), 8000);
+                    return () => clearTimeout(timeoutId);
+                }} value={value} onChange={(e) => {
+                    setTimer(false)
                     setValue(e)
-                    AddDrafts()
+                    AddDrafts(e,title)
                 }} modules={modules} style={{ height: 400 }} />
 
                 {/* <ReactQuill theme="bubble"/> */}

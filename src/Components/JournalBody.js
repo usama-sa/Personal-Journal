@@ -82,16 +82,19 @@ const JournalBody = ({ style }) => {
           <Modal.Header closeButton>
             <Modal.Title>Lock Your Journal</Modal.Title>
           </Modal.Header>
-          <Modal.Body><h4>You're going to lock your journal {journals && journals.filter(f => f.id == id).map(e => e.journaltitle)}.</h4>
-            <LabelText>
-              Password
-            </LabelText>
-            <input className="input-in" type='password' onChange={e => setPassword(e.target.value)} />
-            <LabelText>
-              Re-Type Password
-            </LabelText>
-            <input className="input-in" type='password' onChange={e => setPasswordR(e.target.value)} />
-            <p>{passwordR.length > 0 && password.length > 0 && password === passwordR ? null : passwordR.length > 0 && password.length > 0 && password !== passwordR ? <p style={{ color: 'red' }}>passwords do not match</p> : null}</p>
+          <Modal.Body>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+              <h4>You're going to lock your journal {journals && journals.filter(f => f.id == id).map(e => e.journaltitle)}.</h4>
+              <LabelText>
+                Password
+              </LabelText>
+              <input className="input-in" type='password' onChange={e => setPassword(e.target.value)} />
+              <LabelText>
+                Re-Type Password
+              </LabelText>
+              <input className="input-in" type='password' onChange={e => setPasswordR(e.target.value)} />
+              <p>{passwordR.length > 0 && password.length > 0 && password === passwordR ? null : passwordR.length > 0 && password.length > 0 && password !== passwordR ? <p style={{ color: 'red' }}>passwords do not match</p> : null}</p>
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -126,15 +129,17 @@ const JournalBody = ({ style }) => {
             <Modal.Title>Let's create your Journal</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>You are creating a new journal. This will help you to keep track of your items simultaneously </p>
-            <LabelText>Journal Title</ LabelText>
-            <input className="input-in" onChange={e => {
-              setTitle(e.target.value)
-            }} />
-            <LabelText>Journal Type</LabelText>
-            <input className="input-in" onChange={e => {
-              setType(e.target.value)
-            }} />
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+              <p>You are creating a new journal. This will help you to keep track of your items simultaneously </p>
+              <LabelText>Journal Title</ LabelText>
+              <input className="input-in" onChange={e => {
+                setTitle(e.target.value)
+              }} />
+              <LabelText>Journal Type</LabelText>
+              <input className="input-in" onChange={e => {
+                setType(e.target.value)
+              }} />
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose2}>
@@ -209,15 +214,16 @@ const JournalBody = ({ style }) => {
         </Modal>
         <Modal show={show3} onHide={handleClose3}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit Journal</Modal.Title>
+            <Modal.Title style={{ display: "flex", textAlign: "center" }}>Edit Journal</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>You're going to edit your journal title <h5>{journals && journals.filter(f => f.id == id).map(e => e.journaltitle)}.</h5> </p>
-            <LabelText>Journal Title</ LabelText>
-            <input className="input-in" onChange={e => {
-              setEdit(e.target.value)
-            }} />
-
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+              <p>You're going to edit your journal title <h5>{journals && journals.filter(f => f.id == id).map(e => e.journaltitle)}.</h5> </p>
+              <LabelText>Journal Title</ LabelText>
+              <input className="input-in" onChange={e => {
+                setEdit(e.target.value)
+              }} />
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose3}>
@@ -255,9 +261,9 @@ const JournalBody = ({ style }) => {
 
       {load ?
 
-        <div style={{ position: "relative", textAlign: "center" }}>
+        <div style={{ position: "relative", textAlign: "center", marginTop: 10, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: 'column' }}>
           <BookImg src={MainImages.bookimg} />
-          <div style={{ position: "absolute", color: "white"  }}>
+          <div style={{ position: "absolute", color: "white", bottom: "35%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: 'column' }}>
             <TagImg src={a} />
 
             <p style={{ fontSize: 50, fontWeight: "700", textAlign: "center" }}>
@@ -281,15 +287,15 @@ const JournalBody = ({ style }) => {
         </div>
         :
         journals.length == 0 ?
-          <div style={{ position: "relative", textAlign: "center" }}>
+          <div style={{ position: "relative", textAlign: "center", marginTop: 10, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: 'column' }}>
             <BookImg src={MainImages.bookimg} />
 
-            <div style={{ position: "absolute", color: "white" }}>
+            <div style={{ position: "absolute", color: "white", bottom: "35%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: 'column' }}>
               <TagImg src={a} />
 
-              <p style={{ fontSize: 50, fontWeight: "700", textAlign: "center" }}>
+              <JournalTitle>
                 My First Journal
-              </p>
+              </JournalTitle>
 
 
 
@@ -309,11 +315,11 @@ const JournalBody = ({ style }) => {
             </div>
           </div>
           : journals.map((e) => (
-            <div style={{ position: "relative", textAlign: "center", marginTop: 10,display:"flex",justifyContent:"center",alignItems:"center",flexDirection:'column' }}>
+            <div style={{ position: "relative", textAlign: "center", marginTop: 10, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: 'column' }}>
               <BookImg src={MainImages.bookimg} />
-              <div style={{ position: "absolute",   color: "white", bottom: "35%",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:'column' }}>
+              <div style={{ position: "absolute", color: "white", bottom: "35%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: 'column' }}>
                 <TagImg src={a} />
-                <div style={{ cursor: 'pointer',marginLeft:20,marginTop:20 }} onClick={() => {
+                <div style={{ cursor: 'pointer', marginLeft: 20, marginTop: 20 }} onClick={() => {
                   setId(e.id)
 
                   handleShow3()
@@ -331,26 +337,26 @@ const JournalBody = ({ style }) => {
 
 
 
- 
 
 
 
 
-                  {e.isLocked == 0 ?
-                    <>
-                    <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginRight:40}}>               
-                      
-                             <OptionHolder style={{  cursor: "pointer",marginTop:30 }}>
+
+                {e.isLocked == 0 ?
+                  <>
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginRight: 40 }}>
+
+                      <OptionHolder style={{ cursor: "pointer", marginTop: 30 }}>
 
 
 
                         <OptionHolder style={{ marginLeft: 50, cursor: "pointer" }} onClick={() => navigate("/Journalentry/" + e.id)}>
-                           <OptionImages src={MainImages.new} />
+                          <OptionImages src={MainImages.new} />
                         </OptionHolder>
                         <OptionHolder style={{ marginLeft: 40, cursor: "pointer" }} onClick={() => navigate("/list")}>
 
- 
-                          <OptionImages src={MainImages.listview}/>
+
+                          <OptionImages src={MainImages.listview} />
 
 
                         </OptionHolder>
@@ -361,24 +367,24 @@ const JournalBody = ({ style }) => {
                             handleShow()
                           }}>
 
-<OptionImages src={MainImages.lock}/>
+                          <OptionImages src={MainImages.lock} />
 
 
                         </OptionHolder>
                       </OptionHolder></div>
 
-                    </> : <p
-                      style={{ margin: 'auto', cursor: 'pointer' }}
-                      onClick={() => {
-                        setId(e.id)
-                        handleShow1()
-                      }
-                      }
-                    ><Badge bg="danger">LOCKED <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-lock" viewBox="0 0 20 20">
-                      <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                    </svg></Badge></p>}
+                  </> : <p
+                    style={{ margin: 'auto', cursor: 'pointer' }}
+                    onClick={() => {
+                      setId(e.id)
+                      handleShow1()
+                    }
+                    }
+                  ><Badge bg="danger">LOCKED <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-lock" viewBox="0 0 20 20">
+                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
+                  </svg></Badge></p>}
 
- 
+
 
               </div>
             </div>

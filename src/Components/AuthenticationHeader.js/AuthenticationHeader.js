@@ -41,9 +41,10 @@ const AuthenticationHeader = ({ loginto, search }) => {
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Logout</Modal.Title>
+           <p style={{fontFamily:"sans-serif",fontSize:20,fontWeight:"bold"}}>Logout</p>
         </Modal.Header>
-        <Modal.Body><h5>Are you Sure you want to LOGOUT?</h5>
+        <Modal.Body>
+          <p style={{fontFamily:"sans-serif",fontSize:15,fontWeight:"500"}}>Are you Sure you want to LOGOUT?</p>
 
         </Modal.Body>
         <Modal.Footer>
