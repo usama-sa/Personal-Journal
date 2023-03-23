@@ -3,7 +3,7 @@ import FullPasswordInput from "./FullPasswordInput"
 import FullSimpleInput from "./FullSimpleInput"
 import GeneralButton from "./GeneralButton"
 import { Link, useNavigate } from 'react-router-dom'
-import TextField from '@mui/material/TextField';  
+import TextField from '@mui/material/TextField';
 import { useState } from "react"
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -14,7 +14,7 @@ import { RegisterUser } from "../Apis/Apis"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
+import ReCAPTCHA from "react-google-recaptcha";
 const SignupCard = () => {
     const navigate = useNavigate()
     const [showPassword, setShowPassword] = useState(false);
@@ -23,41 +23,38 @@ const SignupCard = () => {
     const [pwd, setPwd] = useState("")
     const [pwdC, setPwdC] = useState("")
     const [email, setEmail] = useState("")
-    const [load , setLoad] = useState(false)
-
+    const [load, setLoad] = useState(false)
+    const [captcha, setcaptcha] = useState(false)
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-  
+
     const handleMouseDownPassword = (event) => {
-      event.preventDefault();
+        event.preventDefault();
     };
-    
-    const handleRegister=()=>{
-        if(email.length == 0 || pwd.length ==0 || fname.length ==0 || lname.length ==0 || pwdC.length === 0)
-        {
+
+    const handleRegister = () => {
+        if (email.length == 0 || pwd.length == 0 || fname.length == 0 || lname.length == 0 || pwdC.length === 0) {
             toast.error("All Fields are required.")
             setLoad(false)
         }
-        else if(pwd !== pwdC)
-        {
+        else if (pwd !== pwdC) {
             toast.error("Passwords do not match.")
             setLoad(false)
 
         }
-        else{
-        RegisterUser(fname,lname,email,pwd).then(e=>{
-            if(e.status === false)
-            {
-                toast.error(e.message)
-                setLoad(false)
-            }
-            else{
-               toast.success('User Created Successfully')
-               setTimeout(() => {
-                navigate("/")                                    
-            }, 1000);
-            }
-        })
-    }
+        else {
+            RegisterUser(fname, lname, email, pwd).then(e => {
+                if (e.status === false) {
+                    toast.error(e.message)
+                    setLoad(false)
+                }
+                else {
+                    toast.success('User Created Successfully')
+                    setTimeout(() => {
+                        navigate("/")
+                    }, 1000);
+                }
+            })
+        }
     }
     return (
         <div>
@@ -79,7 +76,7 @@ const SignupCard = () => {
                                 id="demo-helper-text-aligned"
                                 style={{ marginTop: 20 }}
                                 onChange={e => {
-                                   setFname(e.target.value)
+                                    setFname(e.target.value)
                                 }}
                             />
                         </div>
@@ -92,7 +89,7 @@ const SignupCard = () => {
                                 id="demo-helper-text-aligned"
                                 style={{ marginTop: 20 }}
                                 onChange={e => {
-                                  setLname(e.target.value)
+                                    setLname(e.target.value)
                                 }}
                             />
                         </div>
@@ -106,7 +103,7 @@ const SignupCard = () => {
                         id="demo-helper-text-aligned"
                         style={{ marginTop: 20 }}
                         onChange={e => {
-                           setEmail(e.target.value)
+                            setEmail(e.target.value)
                         }}
                     />
 
@@ -115,7 +112,7 @@ const SignupCard = () => {
                     </LabelText>
                     <OutlinedInput
                         onChange={e => {
-                           setPwd(e.target.value)
+                            setPwd(e.target.value)
                         }}
                         style={{ marginTop: 20 }}
                         id="outlined-adornment-password"
@@ -136,10 +133,10 @@ const SignupCard = () => {
                     <LabelText>
                         Confirm Password
                     </LabelText>
-                  
+
                     <OutlinedInput
                         onChange={e => {
-                           setPwdC(e.target.value)
+                            setPwdC(e.target.value)
                         }}
                         style={{ marginTop: 20 }}
                         id="outlined-adornment-password"
@@ -165,23 +162,36 @@ const SignupCard = () => {
 
                         </SubSignText>
                     </SubSignHolder>
+                    <div style={{marginTop:30}}>
+                        <ReCAPTCHA
+    sitekey="6LcrjQclAAAAAKNhcHbKRD_v3BQrK5f6BQmFphhX"
+    onChange={()=>{setcaptcha(!captcha)}}
+    size = "normal"
+   /></div>
                     {/* <Button/> */}
-                    {load ?<div class="text-center">
-  <div class="spinner-border" role="status">
-  </div>
-</div>
-:
-                    <div style={{ marginTop: 20 }} onClick={() =>{
-                        setLoad(true)
-                        handleRegister()
-                    }}>
-                        <GeneralButton style={{
-                            padding: 10, backgroundColor: "#CDE4AC", marginTop: 20, justifyContent: "center", alignItems: "center", display: "flex", cursor: 'pointer', boxShadow: '1px 2px 9px black',
-                        }} title="Sign Up" /></div>}
+                    {load ? 
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                        </div>
+                    </div>
+                        :
+
+                        captcha &&
+  
+                        <div style={{ marginTop: 20 }} onClick={() => {
+                            setLoad(true)
+                            handleRegister()
+                        }}>
+                          
+                            <GeneralButton style={{
+                                padding: 10, backgroundColor: "#CDE4AC", marginTop: 20, justifyContent: "center", alignItems: "center", display: "flex", cursor: 'pointer', boxShadow: '1px 2px 9px black',
+                            }} title="Sign Up" /></div>
+                            
+                            }
 
                 </CardMain>
             </MainContainer>
-            <ToastContainer/>
+            <ToastContainer />
 
         </div>
     )
